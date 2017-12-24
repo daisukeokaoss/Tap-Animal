@@ -74,7 +74,7 @@ public class gameManagement : MonoBehaviour {
 
 	private void SpounAnimalRandamUpdate()
 	{
-		int SpounAnimalIndex = 0;//Random.Range (0, Animals.Length);
+		int SpounAnimalIndex = Random.Range (0, Animals.Length);
 		Animals[SpounAnimalIndex].transform.position =
 			Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),1));
 		Instantiate (Animals[SpounAnimalIndex]);
@@ -88,6 +88,7 @@ public class gameManagement : MonoBehaviour {
 		Bombs[SpounBombIndex].transform.position =
 			Camera.main.ViewportToWorldPoint(new Vector3(Random.Range(0.0f,1.0f),Random.Range(0.0f,1.0f),1));
 		Instantiate (Bombs [SpounBombIndex]);
+
 
 	}
 

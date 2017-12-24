@@ -30,11 +30,44 @@ public class gameManagement : MonoBehaviour {
 				var hitObject= Physics2D.Raycast(tapPoint,-Vector2.up);
 				if (hitObject) {
 					Debug.Log("hit object is " + hitObject.collider.gameObject.name);
+					string kind = this.CheckGameObjectAnimalOrBomb (hitObject.collider.gameObject);
+					if (kind == "Animal") {
+						audioSource = gameObject.GetComponents<AudioSource> ();
+						audioSource[0].Play ();
+						Debug.Log ("ハロハロ");
+
+					} else if(kind == "Bombs"){
+
+						audioSource = gameObject.GetComponents<AudioSource> ();
+						audioSource[1].Play ();
+					}
+					Debug.Log (kind);
+
 					Destroy (hitObject.collider.gameObject);
 				}
 			}
 		}
 	}
+
+	private string CheckGameObjectAnimalOrBomb(GameObject gameobject)
+	{
+		Debug.Log ("haroharo is" + gameobject.name);
+		for (int i = 0; i < Animals.Length; i++) {
+			if (Animals [i].name+"(Clone)" == gameobject.name) {
+				return "Animal";
+			}
+		}
+
+		for (int i = 0; i < Bombs.Length; i++) {
+			if (Bombs [i].name+"(Clone)"  == gameobject.name) {
+				return "Bombs";
+			}
+		}
+		return "null";
+	}
+
+
+	private AudioSource[] audioSource;
 
 	public GameObject[] Animals;
 	public GameObject[] Bombs;

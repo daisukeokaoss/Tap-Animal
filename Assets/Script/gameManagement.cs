@@ -1,16 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class gameManagement : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		GameManagementSingleton singleton = GameManagementSingleton.Instance;
+		singleton.SetCoinPoint (0);	
+		singleton.CurrentTime = 0.0f;
 	}
+
+	public GameObject MaxPointText;
+	public GameObject PointText;
+	public GameObject CurrentTimeText;
 	
 	// Update is called once per frame
 	void Update () {
+		//以下、点数表示
+		GameManagementSingleton singleton = GameManagementSingleton.Instance;
+		PointText.GetComponent<Text> ().text = "Point:" + singleton.GetCoinPoint ();
+		singleton.CurrentTime += Time.deltaTime;
+		CurrentTimeText.GetComponent<Text> ().text = "Time:" + (int)singleton.CurrentTime;
+		MaxPointText.GetComponent<Text> ().text = "MaxPoint:" + singleton.MaxCoinPoint;
+
+
 		this.AnimalSpouningCount++;
 		if (this.AnimalSpouningCount >= this.MaxAnimalSpouningCount) {
 			this.SpounAnimalRandamUpdate ();
@@ -21,6 +36,8 @@ public class gameManagement : MonoBehaviour {
 			this.SpounBombRandomUpdate ();
 			this.BombSouningCount = 0;
 		}
+
+
 
 	
 		if (Input.GetMouseButtonDown(0)) {
@@ -33,20 +50,41 @@ public class gameManagement : MonoBehaviour {
 					string kind = this.CheckGameObjectAnimalOrBomb (hitObject.collider.gameObject);
 					if (kind == "Animal") {
 						audioSource = gameObject.GetComponents<AudioSource> ();
-						audioSource[0].Play ();
-						Debug.Log ("ハロハロ");
+						audioSource [0].Play ();
+						GenerateCoin (hitObject.collider.gameObject.transform.position);
+						GenerateCoin (hitObject.collider.gameObject.transform.position);
+						GenerateCoin (hitObject.collider.gameObject.transform.position);
+						GenerateCoin (hitObject.collider.gameObject.transform.position);
+						GenerateCoin (hitObject.collider.gameObject.transform.position);
 
-					} else if(kind == "Bombs"){
+
+					} else if (kind == "Bombs") {
 
 						audioSource = gameObject.GetComponents<AudioSource> ();
-						audioSource[1].Play ();
+						audioSource [1].Play ();
+						singleton = GameManagementSingleton.Instance;
+						singleton.SetCoinPoint(0);
+					} else if (kind == "coin") {
+						audioSource = gameObject.GetComponents<AudioSource> ();
+						audioSource [0].Play ();
 					}
-					Debug.Log (kind);
+				
 
 					Destroy (hitObject.collider.gameObject);
 				}
 			}
 		}
+	}
+
+	private void GenerateCoin(Vector3 position)
+	{
+		coin.transform.position = position;
+		//coin.GetComponent<Rigidbody> ().AddForce (new Vector3 (5, 0, 0), ForceMode);
+		GameObject coinObj = Instantiate (coin) as GameObject;
+		int xDirection = Random.Range (-5, 5);
+		int yDirection = Random.Range (-5, 20);
+		coinObj.GetComponent<Rigidbody>().AddForce(new Vector3 (xDirection, yDirection, 0), ForceMode.Impulse);
+		Destroy (coinObj, 5f);
 	}
 
 	private string CheckGameObjectAnimalOrBomb(GameObject gameobject)
@@ -63,6 +101,9 @@ public class gameManagement : MonoBehaviour {
 				return "Bombs";
 			}
 		}
+		if (coin.name + "(Clone)" == gameobject.name) {
+			return "coin";
+		}
 		return "null";
 	}
 
@@ -71,6 +112,8 @@ public class gameManagement : MonoBehaviour {
 
 	public GameObject[] Animals;
 	public GameObject[] Bombs;
+
+	public GameObject coin;
 
 	private void SpounAnimalRandamUpdate()
 	{

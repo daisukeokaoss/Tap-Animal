@@ -14,7 +14,7 @@ public class DestroyTimer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		time += Time.deltaTime;
-		print (time);
+		//print (time);
 		if(time>life_time){
 			Destroy(gameObject);
 		}		

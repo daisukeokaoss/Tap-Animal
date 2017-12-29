@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class gameManagement : MonoBehaviour {
 
@@ -24,6 +25,10 @@ public class gameManagement : MonoBehaviour {
 		singleton.CurrentTime += Time.deltaTime;
 		CurrentTimeText.GetComponent<Text> ().text = "Time:" + (int)singleton.CurrentTime;
 		MaxPointText.GetComponent<Text> ().text = "MaxPoint:" + singleton.MaxCoinPoint;
+
+		if ((int)singleton.CurrentTime == 300) {
+			SceneManager.LoadScene ("EndGame");
+		}
 
 
 		this.AnimalSpouningCount++;

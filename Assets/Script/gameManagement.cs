@@ -61,6 +61,8 @@ public class gameManagement : MonoBehaviour {
 						GenerateCoin (hitObject.collider.gameObject.transform.position);
 						GenerateCoin (hitObject.collider.gameObject.transform.position);
 						GenerateCoin (hitObject.collider.gameObject.transform.position);
+						singleton = GameManagementSingleton.Instance;
+						singleton.IncreaseCoinPoint (10);
 
 
 					} else if (kind == "Bombs") {
